@@ -10,11 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1437365086550438704, guid: d9ad06ed8551a7b4197e0f781bc06e8f, type: 3}
       propertyPath: m_Name
-      value: ProjectileBase Variant
+      value: ServerProjectile
+      objectReference: {fileID: 0}
+    - target: {fileID: 4896799330287891432, guid: d9ad06ed8551a7b4197e0f781bc06e8f, type: 3}
+      propertyPath: lifeTime
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8638283912406966758, guid: d9ad06ed8551a7b4197e0f781bc06e8f, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8638283912406966758, guid: d9ad06ed8551a7b4197e0f781bc06e8f, type: 3}
       propertyPath: m_LocalPosition.x
