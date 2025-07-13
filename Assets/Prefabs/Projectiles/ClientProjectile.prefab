@@ -96,6 +96,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ClientProjectile
       objectReference: {fileID: 0}
+    - target: {fileID: 4896799330287891432, guid: d9ad06ed8551a7b4197e0f781bc06e8f, type: 3}
+      propertyPath: lifeTime
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8638283912406966758, guid: d9ad06ed8551a7b4197e0f781bc06e8f, type: 3}
       propertyPath: m_RootOrder
       value: 0
