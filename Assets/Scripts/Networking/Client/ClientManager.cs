@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,5 +26,10 @@ public class ClientManager : MonoBehaviour
     {
         GameManager = new ClientGameManager();
         return await GameManager.InitAsync();
+    }
+
+    private void OnDestroy()
+    {
+        GameManager?.Dispose();
     }
 }

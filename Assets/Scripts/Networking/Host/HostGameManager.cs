@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
+using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
@@ -12,11 +14,13 @@ using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class HostGameManager
+public class HostGameManager: IDisposable
 {
     private Allocation allocation;
     private string joinCode;
     private string lobbyId;
+
+    private NetworkServer networkServer;
     private const int MaxConnections = 20;
     
     public async Task StartHostSync()
@@ -59,9 +63,11 @@ public class HostGameManager
                         value: joinCode)
                 }
             };
-            
-            Lobby lobby = await Lobbies.Instance.CreateLobbyAsync("My Lobby", MaxConnections, lobbyOptions);
+
+            string playerName = PlayerPrefs.GetString(NameSelector.PlayerNameKey, "Unknown Lobby!");
+            Lobby lobby = await Lobbies.Instance.CreateLobbyAsync($"{playerName}'s Lobby", MaxConnections, lobbyOptions);
             lobbyId = lobby.Id;
+            
             HostManager.Instance.StartCoroutine(HearbeatLobby(15));
         }
         catch (LobbyServiceException e)
@@ -70,6 +76,16 @@ public class HostGameManager
             return;
         }
 
+        networkServer = new NetworkServer(NetworkManager.Singleton);
+        
+        UserData userData = new UserData()
+        {
+            userName = PlayerPrefs.GetString(NameSelector.PlayerNameKey, "Missing Name!"),
+            userAuthId = AuthenticationService.Instance.PlayerId
+        };
+
+        string payload = JsonUtility.ToJson(userData);
+        byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.SceneManager.LoadScene("Gameplay", LoadSceneMode.Single);
     }
@@ -82,5 +98,25 @@ public class HostGameManager
             Lobbies.Instance.SendHeartbeatPingAsync(lobbyId);
             yield return delay;
         }
+    }
+
+    public async void Dispose()
+    {
+        HostManager.Instance.StopCoroutine(nameof(HearbeatLobby));
+        if (!string.IsNullOrEmpty(lobbyId))
+        {
+            try
+            {
+                await Lobbies.Instance.DeleteLobbyAsync(lobbyId);
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+
+            lobbyId = string.Empty;
+        }
+            
+        networkServer?.Dispose();
     }
 }
