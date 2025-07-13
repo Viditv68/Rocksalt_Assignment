@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 510abc24e13ac864e857c79261fa4722, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -473,12 +473,12 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 2142742124}
-    PlayerPrefab: {fileID: 6103757692038259882, guid: 5ef450c421bb71e48a60ad1d1dd1e405, type: 3}
+    PlayerPrefab: {fileID: 8699116465595102661, guid: 5ef450c421bb71e48a60ad1d1dd1e405, type: 3}
     Prefabs:
       NetworkPrefabsLists: []
     TickRate: 30
     ClientConnectionBufferTimeout: 10
-    ConnectionApproval: 0
+    ConnectionApproval: 1
     ConnectionData: 
     EnableTimeResync: 0
     TimeResyncInterval: 30

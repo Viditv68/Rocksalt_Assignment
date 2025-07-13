@@ -12,7 +12,7 @@ public class NetworkServer :  IDisposable
     public NetworkServer(NetworkManager networkManager)
     {
         this.networkManager = networkManager;
-
+        networkManager.NetworkConfig.ConnectionApproval = true;
         networkManager.ConnectionApprovalCallback += ApprovalCheck;
         networkManager.OnServerStarted += OnNetworkdReady;
     }
@@ -34,6 +34,7 @@ public class NetworkServer :  IDisposable
     private void OnNetworkdReady()
     {
         networkManager.OnClientDisconnectCallback += OnClientDisconnect;
+
     }
 
     private void OnClientDisconnect(ulong clientId)
@@ -43,6 +44,21 @@ public class NetworkServer :  IDisposable
             clientAuthId.Remove(clientId);
             authIdtoUserData.Remove(authId);
         }
+    }
+
+    public UserData GetUserDataByClientId(ulong clientId)
+    {
+        if (clientAuthId.TryGetValue(clientId, out string authId))
+        {
+            if (authIdtoUserData.TryGetValue(authId, out UserData userData))
+            {
+                return userData;
+            }
+
+            return null;
+        }
+
+        return null;
     }
 
     public void Dispose()
